@@ -1,9 +1,45 @@
-.ColorPicker-option {
+.ColorPicker {
   display: flex;
+  flex-direction: column;
 }
 
+.ColorPicker + .ColorPicker {
+  margin-top: 10px;
+}
+
+/* ColorPicker-select */
+.ColorPicker-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ColorPicker-select::after {
+  content: "<>";
+  position: absolute;
+  right: 0;
+}
+
+.ColorPicker-select select {
+  flex: 1;
+  appearance: none;
+  border: none;
+  padding: 0;
+  margin-left: -5px;
+}
+
+.ColorPicker-option {
+  appearance: none;
+}
+
+/* ColorPicker-custom */
 .ColorPicker-custom {
   display: none;
+  width: 100%;
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
 }
 
 .ColorPicker.is-custom .ColorPicker-custom {

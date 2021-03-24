@@ -62,7 +62,7 @@ function isSimFrame() {
 // -- events --
 function initEvents() {
   const $colors = getColorsEl()
-  $colors.addEventListener("change", didChangeColors)
+  $colors.addEventListener("input", didChangeColors)
 
   const $canvas = getCanvas()
   $canvas.addEventListener("click", didClickMouse)

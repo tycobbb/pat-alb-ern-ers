@@ -4,6 +4,10 @@ body, h1, h2, h3, p {
 }
 
 /* global */
+h1 {
+  font-size: 2em;
+}
+
 h2 {
   font-weight: normal;
 }
@@ -22,7 +26,12 @@ h2 {
   max-width: 250px;
 }
 
+.Main-options h1 {
+  margin-bottom: 10px;
+}
+
 .Main-options h2 {
+  margin-bottom: 10px;
   border-bottom: 1px dotted black;
 }
 

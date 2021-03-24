@@ -11,25 +11,27 @@ const kTemplate = `
       color x
     </p>
 
-    <select class="ColorPicker-select">
-      ${kColors.map((color, i) => `
-        <option
-          class="ColorPicker-option"
-          value="${i}"
-          style="color: ${getStyleHex(color)};"
-        >
-          ${color}
-        </option>
-      `).join("")}
+    <div class="ColorPicker-select">
+      <select>
+        ${kColors.map((color, i) => `
+          <option
+            class="ColorPicker-option"
+            value="${i}"
+            style="color: ${getStyleHex(color)};"
+          >
+            ${color}
+          </option>
+        `).join("")}
 
-      <option
-        class="ColorPicker-customOption"
-        value="custom"
-        style="color: black;"
-      >
-        custom
-      </option>
-    </select>
+        <option
+          class="ColorPicker-option ColorPicker-customOption"
+          value="custom"
+          style="color: black;"
+        >
+          custom
+        </option>
+      </select>
+    </div>
 
     <input
       class="ColorPicker-custom"
@@ -73,7 +75,7 @@ export function addColors(colors = []) {
     setPickerColor($el, color)
 
     // add events
-    $el.addEventListener("change", didClickOption)
+    $el.addEventListener("input", didClickOption)
 
     // append el
     $mColors.appendChild($el)
@@ -91,7 +93,7 @@ function setPickerColor($el, color) {
   $el.setAttribute("color", hex)
 
   // update select value, color
-  const $select = $el.querySelector(".ColorPicker-select")
+  const $select = $el.querySelector(".ColorPicker-select select")
   $select.value = value
   $select.style.color = getStyleHex(hex)
 
