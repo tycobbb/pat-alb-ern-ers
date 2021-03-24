@@ -4,6 +4,7 @@
   <meta http-equiv="cache-control" content="no-cache" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="-1" />
+  <title>pat / alb / ern / ers</title>
   <link href="./src/main.css" rel="stylesheet">
   <link href="./src/colors.css" rel="stylesheet">
   <script type="module" src="./src/main.js"></script>
@@ -11,16 +12,21 @@
 
 <body>
   <main class="Main">
+    <!-- options -->
     <div class="Main-gutter">
       <section class="Options">
         <h1>options</h1>
 
         <section class="Options-group">
           <h2>interactions</h2>
-          <div class="Select">
-            <select class="Select-input">
-              <option value="1">gol</option>
-            </select>
+
+          <div id="interactions">
+            <div class="Select">
+              <select class="Select-input">
+                <option value="gol">gol</option>
+                <option value="v-3">v-3</option>
+              </select>
+            </div>
           </div>
         </section>
 
@@ -31,11 +37,10 @@
       </section>
     </div>
 
-    <canvas
-      id="canvas"
-      class="Main-canvas"
-    ></canvas>
+    <!-- canvas -->
+    <canvas id="canvas" class="Main-canvas"></canvas>
 
+    <!-- cool gutter -->
     <div class="Main-gutter">
       <p>the other cool gutter</p>
     </div>

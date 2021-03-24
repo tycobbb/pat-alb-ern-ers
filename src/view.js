@@ -14,8 +14,6 @@ const kQuad = new Float32Array([
 // -- c/theme
 const kWhiteColor = new Float32Array([1.00, 1.00, 1.00, 1.00])
 const kMagentaColor = new Float32Array([1.00, 0.00, 1.00, 1.00])
-// const kBgColor = new Float32Array([0.00, 0.00, 0.00, 0.00])
-// const kFgColor = new Float32Array([0.43, 0.56, 0.48, 1.00])
 
 // -- c/state
 const kNoColor = [0, 0, 0, 255]
@@ -30,8 +28,10 @@ const kGlider = initSubImage([
 // -- props -
 let mCanvas = null
 let mGl = null
+let mAssets = null
 let mSize = null
 let mSimSize = null
+let mIx = "gol"
 let mTheme = null
 
 // -- p/gl
@@ -54,6 +54,9 @@ export function init(id, assets) {
     console.error("where is webgl NOW~!")
     return false
   }
+
+  // hang on to assets
+  mAssets = assets
 
   // track viewport/sim sizes
   mSize =
@@ -78,9 +81,10 @@ export function init(id, assets) {
   mTextures = initTextures()
   mFramebuffers = initFramebuffers()
   mBuffers = initBuffers()
-  mShaderDescs = initShaderDescs(assets)
 
-  if (mShaderDescs.sim == null || mShaderDescs.draw == null) {
+  // try and compile shaders
+  const compiled = syncShaderDescs()
+  if (!compiled) {
     return false
   }
 
@@ -214,6 +218,11 @@ export function draw() {
   )
 }
 
+export function setIx(ix) {
+  mIx = ix
+  syncShaderDescs()
+}
+
 export function setTheme(colors) {
   mTheme = colors.map((hex) => {
     return new Float32Array(getRgbaFromHex(hex))
@@ -342,11 +351,24 @@ function initSubImage(cells) {
 }
 
 // -- c/shaders
+function syncShaderDescs() {
+  mShaderDescs = initShaderDescs()
+  if (mShaderDescs.sim == null || mShaderDescs.draw == null) {
+    return false
+  }
+
+  return true
+}
+
 function initShaderDescs(assets) {
   const gl = mGl
 
+  // grab shader src for this interaction
+  const srcs = mAssets.shaders[mIx]
+
+  // compile and produce shader descs
   return {
-    sim: initShaderDesc(assets.shaders.sim, (program) => ({
+    sim: initShaderDesc(srcs.sim, (program) => ({
       attribs: {
         pos: gl.getAttribLocation(program, "aPos"),
       },
@@ -355,7 +377,7 @@ function initShaderDescs(assets) {
         scale: gl.getUniformLocation(program, "uScale"),
       },
     })),
-    draw: initShaderDesc(assets.shaders.draw, (program) => ({
+    draw: initShaderDesc(srcs.draw, (program) => ({
       attribs: {
         pos: gl.getAttribLocation(program, "aPos"),
       },

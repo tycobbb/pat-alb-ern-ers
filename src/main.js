@@ -1,5 +1,5 @@
 import { loadEl, loadAssets } from "./load.js"
-import { init as initView, sim, draw, poke, getCanvas, setTheme } from "./view.js"
+import { init as initView, sim, draw, poke, getCanvas, setTheme, setIx } from "./view.js"
 import { init as initColors, getEl as getColorsEl, getColors } from "./colors.js"
 
 // -- constants --
@@ -61,6 +61,9 @@ function isSimFrame() {
 
 // -- events --
 function initEvents() {
+  const $interactions = document.getElementById("interactions")
+  $interactions.addEventListener("input", didChangeIx)
+
   const $colors = getColorsEl()
   $colors.addEventListener("input", didChangeColors)
 
@@ -89,24 +92,44 @@ function didMoveMouse(evt) {
 }
 
 // -- e/options
+function didChangeIx(evt) {
+  setIx(evt.target.value)
+}
+
 function didChangeColors(_evt) {
   syncTheme()
 }
 
 // -- boostrap --
 (async function load() {
+  function p(path) {
+    return `./src/ixs/${path}`
+  }
+
   // wait for the window and all assets
   const [_w, assets] = await Promise.all([
     loadEl(window),
     loadAssets({
       shaders: {
-        sim: {
-          vert: "./src/sim/sim.vert",
-          frag: "./src/sim/sim.frag",
+        ["gol"]: {
+          sim: {
+            vert: p("gol/sim.vert"),
+            frag: p("gol/sim.frag"),
+          },
+          draw: {
+            vert: p("gol/draw.vert"),
+            frag: p("gol/draw.frag"),
+          },
         },
-        draw: {
-          vert: "./src/draw/draw.vert",
-          frag: "./src/draw/draw.frag",
+        ["v-3"]: {
+          sim: {
+            vert: p("v-3/sim.vert"),
+            frag: p("v-3/sim.frag"),
+          },
+          draw: {
+            vert: p("v-3/draw.vert"),
+            frag: p("v-3/draw.frag"),
+          },
         }
       }
     })

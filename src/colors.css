@@ -4,10 +4,17 @@
 }
 
 .ColorPicker + .ColorPicker {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
-/* ColorPicker-custom */
+/* title */
+.ColorPicker-title {
+  font-size: 0.85em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+/* custom */
 .ColorPicker-custom {
   display: none;
   width: 100%;
