@@ -11,15 +11,34 @@
 
 <body>
   <main class="Main">
-    <section class="Main-options">
-      <h1>options</h1>
-      <section>
-        <h2>colors</h2>
-        <div id="colors"></div>
-      </section>
-    </section>
+    <div class="Main-gutter">
+      <section class="Options">
+        <h1>options</h1>
 
-    <canvas id="canvas" class="Main-canvas"></canvas>
+        <section class="Options-group">
+          <h2>interactions</h2>
+          <div class="Select">
+            <select class="Select-input">
+              <option value="1">gol</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="Options-group">
+          <h2>colors</h2>
+          <div id="colors"></div>
+        </section>
+      </section>
+    </div>
+
+    <canvas
+      id="canvas"
+      class="Main-canvas"
+    ></canvas>
+
+    <div class="Main-gutter">
+      <p>the other cool gutter</p>
+    </div>
   </main>
 </body>
 </html>

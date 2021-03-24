@@ -21,21 +21,59 @@ h2 {
   align-items: center;
 }
 
-.Main-options {
+.Main-canvas {
+  width: 80vmin;
+  height: 80vmin;
+}
+
+.Main-gutter {
   flex: 1;
-  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.Main-options h1 {
-  margin-bottom: 10px;
+.Main-gutter > p {
+  color: white;
 }
 
-.Main-options h2 {
+/* Options */
+.Options {
+  max-width: 200px;
+}
+
+.Options h1 {
+  margin-bottom: 20px;
+}
+
+.Options h2 {
   margin-bottom: 10px;
   border-bottom: 1px dotted black;
 }
 
-.Main-canvas {
-  width: 80vmin;
-  height: 80vmin;
+.Options-group + .Options-group {
+  margin-top: 20px;
+}
+
+/* Select */
+.Select {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.Select::after {
+  content: "<:>";
+  position: absolute;
+  right: 0;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.Select-input {
+  flex: 1;
+  appearance: none;
+  border: none;
+  padding: 0;
+  margin-left: -4px;
 }

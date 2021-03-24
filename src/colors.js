@@ -1,7 +1,7 @@
 // -- constants --
 const kColors = [
-  "#ff0000",
-  "#00ff00",
+  "#b68a5b",
+  "#63a5af",
   "#0000ff",
 ]
 
@@ -11,11 +11,10 @@ const kTemplate = `
       color x
     </p>
 
-    <div class="ColorPicker-select">
-      <select>
+    <div class="Select">
+      <select class="Select-input">
         ${kColors.map((color, i) => `
           <option
-            class="ColorPicker-option"
             value="${i}"
             style="color: ${getStyleHex(color)};"
           >
@@ -24,7 +23,7 @@ const kTemplate = `
         `).join("")}
 
         <option
-          class="ColorPicker-option ColorPicker-customOption"
+          class="ColorPicker-customOption"
           value="custom"
           style="color: black;"
         >
@@ -93,7 +92,7 @@ function setPickerColor($el, color) {
   $el.setAttribute("color", hex)
 
   // update select value, color
-  const $select = $el.querySelector(".ColorPicker-select select")
+  const $select = $el.querySelector(".Select-input")
   $select.value = value
   $select.style.color = getStyleHex(hex)
 
