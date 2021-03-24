@@ -8,7 +8,7 @@ const kColors = [
 const kTemplate = `
   <div class="ColorPicker">
     <p class="ColorPicker-title">
-      color x
+      color <span class="ColorPicker-idx">x</span>
     </p>
 
     <div class="Select">
@@ -68,7 +68,7 @@ export function addColors(colors = []) {
     const $el = $mTemplate.cloneNode(true)
 
     // set title
-    $el.querySelector(".ColorPicker-title").innerText = `color ${i}`
+    $el.querySelector(".ColorPicker-idx").innerText = `${i}`
 
     // set initial value
     setPickerColor($el, color)

@@ -1,5 +1,5 @@
 import { loadEl, loadAssets } from "./load.js"
-import { init as initView, sim, draw, poke, getCanvas, setTheme, setIx } from "./view.js"
+import { init as initView, sim, draw, poke, getCanvas, setTheme, setPlate } from "./view.js"
 import { init as initColors, getEl as getColorsEl, getColors } from "./colors.js"
 
 // -- constants --
@@ -61,8 +61,8 @@ function isSimFrame() {
 
 // -- events --
 function initEvents() {
-  const $interactions = document.getElementById("interactions")
-  $interactions.addEventListener("input", didChangeIx)
+  const $plates = document.getElementById("plates")
+  $plates.addEventListener("input", didChangePlate)
 
   const $colors = getColorsEl()
   $colors.addEventListener("input", didChangeColors)
@@ -92,8 +92,8 @@ function didMoveMouse(evt) {
 }
 
 // -- e/options
-function didChangeIx(evt) {
-  setIx(evt.target.value)
+function didChangePlate(evt) {
+  setPlate(evt.target.value)
 }
 
 function didChangeColors(_evt) {
@@ -103,7 +103,7 @@ function didChangeColors(_evt) {
 // -- boostrap --
 (async function load() {
   function p(path) {
-    return `./src/ixs/${path}`
+    return `./src/plates/${path}`
   }
 
   // wait for the window and all assets

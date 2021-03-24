@@ -61,7 +61,6 @@ h2 {
 .Select {
   position: relative;
   display: flex;
-  align-items: center;
 }
 
 .Select::after {
@@ -70,6 +69,7 @@ h2 {
   right: 0;
   font-family: monospace;
   font-weight: bold;
+  pointer-events: none;
 }
 
 .Select-input {

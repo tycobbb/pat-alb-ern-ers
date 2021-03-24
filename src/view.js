@@ -31,7 +31,7 @@ let mGl = null
 let mAssets = null
 let mSize = null
 let mSimSize = null
-let mIx = "gol"
+let mPlate = "gol"
 let mTheme = null
 
 // -- p/gl
@@ -218,8 +218,8 @@ export function draw() {
   )
 }
 
-export function setIx(ix) {
-  mIx = ix
+export function setPlate(plate) {
+  mPlate = plate
   syncShaderDescs()
 }
 
@@ -364,7 +364,7 @@ function initShaderDescs(assets) {
   const gl = mGl
 
   // grab shader src for this interaction
-  const srcs = mAssets.shaders[mIx]
+  const srcs = mAssets.shaders[mPlate]
 
   // compile and produce shader descs
   return {
