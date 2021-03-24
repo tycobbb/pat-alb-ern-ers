@@ -1,31 +1,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="-1" />
+  <link href="./src/main.css" rel="stylesheet">
+  <link href="./src/colors.css" rel="stylesheet">
   <script type="module" src="./src/main.js"></script>
-
-  <style>
-    body {
-      margin: 0;
-    }
-
-    main {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #canvas {
-      width: 80vmin;
-      height: 80vmin;
-    }
-  </style>
 </head>
 
 <body>
-  <main>
-    <canvas id="canvas"></canvas>
+  <main class="Main">
+    <section class="Main-options">
+      <h1>options</h1>
+      <section>
+        <h2>colors</h2>
+        <div id="colors"></div>
+      </section>
+    </section>
+
+    <canvas id="canvas" class="Main-canvas"></canvas>
   </main>
 </body>
 </html>

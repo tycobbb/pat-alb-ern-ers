@@ -1,0 +1,11 @@
+.ColorPicker-option {
+  display: flex;
+}
+
+.ColorPicker-custom {
+  display: none;
+}
+
+.ColorPicker.is-custom .ColorPicker-custom {
+  display: block;
+}

@@ -1,5 +1,6 @@
 import { loadEl, loadAssets } from "./load.js"
-import { init as initView, sim, draw, poke, getCanvas } from "./view.js"
+import { init as initView, sim, draw, poke, getCanvas, setTheme } from "./view.js"
+import { init as initColors, getEl as getColorsEl, getColors } from "./colors.js"
 
 // -- constants --
 const kFrameScale = 60 / 15
@@ -8,13 +9,21 @@ const kFrameScale = 60 / 15
 let mTime = null
 let mFrame = 0
 
+// -- p/els
+let $mOptions
+
 // -- lifetime --
 function main(assets) {
   console.debug("start")
 
   // initialize
+  $mOptions = document.getElementById("options")
   initView("canvas", assets)
+  initColors([0, 1])
   initEvents()
+
+  // initial theme
+  syncTheme()
 
   // start loop
   loop()
@@ -41,6 +50,10 @@ function spawn(evt) {
   )
 }
 
+function syncTheme() {
+  setTheme(getColors())
+}
+
 // -- queries --
 function isSimFrame() {
   return mFrame % kFrameScale === 0
@@ -48,11 +61,15 @@ function isSimFrame() {
 
 // -- events --
 function initEvents() {
-  const c = getCanvas()
-  c.addEventListener("click", didClickMouse)
-  c.addEventListener("mousemove", didMoveMouse)
+  const $colors = getColorsEl()
+  $colors.addEventListener("change", didChangeColors)
+
+  const $canvas = getCanvas()
+  $canvas.addEventListener("click", didClickMouse)
+  $canvas.addEventListener("mousemove", didMoveMouse)
 }
 
+// -- e/mouse
 function didClickMouse(evt) {
   spawn(evt)
 }
@@ -69,6 +86,11 @@ function didMoveMouse(evt) {
   }
 
   spawn(evt)
+}
+
+// -- e/options
+function didChangeColors(_evt) {
+  syncTheme()
 }
 
 // -- boostrap --

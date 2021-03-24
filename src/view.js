@@ -1,3 +1,5 @@
+import { getRgbaFromHex } from "./utils.js"
+
 // -- constants --
 const kScale = 4
 
@@ -10,8 +12,10 @@ const kQuad = new Float32Array([
 ])
 
 // -- c/theme
-const kBgColor = new Float32Array([0.00, 0.00, 0.00, 0.00])
-const kFgColor = new Float32Array([0.43, 0.56, 0.48, 1.00])
+const kWhiteColor = new Float32Array([1.00, 1.00, 1.00, 1.00])
+const kMagentaColor = new Float32Array([1.00, 0.00, 1.00, 1.00])
+// const kBgColor = new Float32Array([0.00, 0.00, 0.00, 0.00])
+// const kFgColor = new Float32Array([0.43, 0.56, 0.48, 1.00])
 
 // -- c/state
 const kNoColor = [0, 0, 0, 255]
@@ -28,6 +32,7 @@ let mCanvas = null
 let mGl = null
 let mSize = null
 let mSimSize = null
+let mTheme = null
 
 // -- p/gl
 let mTextures = null
@@ -193,12 +198,12 @@ export function draw() {
 
   gl.uniform4fv(
     sd.uniforms.colors.bg,
-    kBgColor,
+    getThemeColor(0),
   )
 
   gl.uniform4fv(
     sd.uniforms.colors.fg,
-    kFgColor,
+    getThemeColor(1),
   )
 
   // draw to screen
@@ -207,6 +212,12 @@ export function draw() {
     0,                 // offset
     4,                 // number of indicies (4, quad)
   )
+}
+
+export function setTheme(colors) {
+  mTheme = colors.map((hex) => {
+    return new Float32Array(getRgbaFromHex(hex))
+  })
 }
 
 export function poke(x, y) {
@@ -473,4 +484,12 @@ function initSize(w, h) {
 // -- queries --
 export function getCanvas() {
   return mCanvas
+}
+
+function getThemeColor(i) {
+  if (mTheme == null) {
+    return kWhiteColor
+  }
+
+  return mTheme[i] || kMagentaColor
 }
