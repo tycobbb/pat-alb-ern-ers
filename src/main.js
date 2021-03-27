@@ -1,5 +1,5 @@
 import { loadEl, loadAssets } from "./load.js"
-import { init as initView, sim, draw, poke, getCanvas, setTheme, setPlate, setData } from "./view.js"
+import { init as initView, sim, draw, poke, getCanvas, setTheme, setPlate, setData, randomize, reset } from "./view.js"
 import { init as initColors, getEl as getColorsEl, getColors } from "./colors.js"
 import { init as initPlates, getPlate } from "./plates.js"
 
@@ -104,6 +104,9 @@ function initEvents() {
   const $canvas = getCanvas()
   $canvas.addEventListener("click", didClickMouse)
   $canvas.addEventListener("mousemove", didMoveMouse)
+
+  // keyboard
+  document.addEventListener("keydown", didPressKey)
 }
 
 // -- e/mouse
@@ -123,6 +126,15 @@ function didMoveMouse(evt) {
   }
 
   spawn(evt)
+}
+
+// -- e/keyboard
+function didPressKey(evt) {
+  if (evt.key === "e") {
+    randomize()
+  } else if (evt.key === "r") {
+    reset()
+  }
 }
 
 // -- e/options

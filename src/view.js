@@ -244,12 +244,45 @@ export function poke(x, y) {
   )
 }
 
+export function reset() {
+  clearTexture()
+}
+
+export function randomize() {
+  seedTexture()
+}
+
 // -- c/textures
 function initTextures() {
   return {
     curr: initTexture(),
     next: initTexture(),
   }
+}
+
+function clearTexture() {
+  const gl = mGl
+
+  // enough space for rgba components at every cell
+  const size = mSimSize.w * mSimSize.h * 4
+
+  // assign a random value to each cell
+  const seed = new Uint8Array(size)
+
+  // set the texture
+  gl.bindTexture(gl.TEXTURE_2D, mTextures.curr)
+  gl.texSubImage2D(
+    gl.TEXTURE_2D,
+    0,                // lod, mipmap,
+    0,                // x-offset
+    0,                // y-offset
+    mSimSize.w,       // width
+    mSimSize.h,       // height
+    gl.RGBA,          // color component format
+    gl.UNSIGNED_BYTE, // component data type
+    seed,             // source
+    0,                // source offset
+  )
 }
 
 function seedTexture() {
