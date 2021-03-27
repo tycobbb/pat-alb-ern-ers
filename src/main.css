@@ -57,6 +57,22 @@ h2 {
   margin-top: 20px;
 }
 
+/* Field */
+.Field {
+  display: flex;
+  flex-direction: column;
+}
+
+.Field + .Field {
+  margin-top: 15px;
+}
+
+.Field-title {
+  margin-bottom: 5px;
+  font-size: 0.85em;
+  letter-spacing: 1px;
+}
+
 /* Select */
 .Select {
   position: relative;

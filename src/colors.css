@@ -1,19 +1,4 @@
-.ColorPicker {
-  display: flex;
-  flex-direction: column;
-}
-
-.ColorPicker + .ColorPicker {
-  margin-top: 15px;
-}
-
 /* title */
-.ColorPicker-title {
-  margin-bottom: 5px;
-  font-size: 0.85em;
-  letter-spacing: 1px;
-}
-
 .ColorPicker-idx {
   font-family: monospace;
   font-weight: 600;

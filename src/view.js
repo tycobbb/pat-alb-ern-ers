@@ -31,8 +31,9 @@ let mGl = null
 let mAssets = null
 let mSize = null
 let mSimSize = null
-let mPlate = "gol"
+let mPlate = null
 let mTheme = null
+let mData = null
 
 // -- p/gl
 let mTextures = null
@@ -83,11 +84,6 @@ export function init(id, assets) {
   mBuffers = initBuffers()
 
   // try and compile shaders
-  const compiled = syncShaderDescs()
-  if (!compiled) {
-    return false
-  }
-
   return true
 }
 
@@ -133,7 +129,7 @@ export function sim(_time) {
   // conf shader program
   gl.useProgram(sd.program)
 
-  // conf shader uniforms
+  // conf global uniforms
   gl.uniform1i(
     sd.uniforms.state,
     0,
@@ -143,6 +139,13 @@ export function sim(_time) {
     sd.uniforms.scale,
     mSimSize.v,
   )
+
+  // conf data uniforms
+  for (const name in mPlate.data) {
+    const loc = sd.uniforms.data[name]
+    const val = mData[name] || mPlate.getData(name)
+    gl.uniform1i(loc, val)
+  }
 
   // "draw" simulation
   gl.drawArrays(
@@ -189,7 +192,7 @@ export function draw() {
   // conf shader program
   gl.useProgram(sd.program)
 
-  // conf shader uniforms
+  // conf global uniforms
   gl.uniform1i(
     sd.uniforms.state,
     0,
@@ -200,6 +203,7 @@ export function draw() {
     mSize.v,
   )
 
+  // conf color uniforms
   gl.uniform4fv(
     sd.uniforms.colors.bg,
     getThemeColor(0),
@@ -221,6 +225,10 @@ export function draw() {
 export function setPlate(plate) {
   mPlate = plate
   syncShaderDescs()
+}
+
+export function setData(data) {
+  mData = data
 }
 
 export function setTheme(colors) {
@@ -353,7 +361,8 @@ function initSubImage(cells) {
 // -- c/shaders
 function syncShaderDescs() {
   mShaderDescs = initShaderDescs()
-  if (mShaderDescs.sim == null || mShaderDescs.draw == null) {
+  if (mShaderDescs == null || mShaderDescs.sim == null || mShaderDescs.draw == null) {
+    console.error("could not compile shaders")
     return false
   }
 
@@ -363,8 +372,13 @@ function syncShaderDescs() {
 function initShaderDescs(assets) {
   const gl = mGl
 
+  // make sure we have a plate
+  if (mPlate == null) {
+    return null
+  }
+
   // grab shader src for this interaction
-  const srcs = mAssets.shaders[mPlate]
+  const srcs = mAssets.shaders[mPlate.name]
 
   // compile and produce shader descs
   return {
@@ -375,6 +389,9 @@ function initShaderDescs(assets) {
       uniforms: {
         state: gl.getUniformLocation(program, "uState"),
         scale: gl.getUniformLocation(program, "uScale"),
+        data: {
+          int0: gl.getUniformLocation(program, "uInt0"),
+        },
       },
     })),
     draw: initShaderDesc(srcs.draw, (program) => ({

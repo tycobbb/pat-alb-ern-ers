@@ -1,13 +1,13 @@
 // -- constants --
 const kColors = [
   "#b68a5b",
+  "#b86661",
   "#63a5af",
-  "#0000ff",
 ]
 
 const kTemplate = `
-  <div class="ColorPicker">
-    <p class="ColorPicker-title">
+  <div class="ColorPicker Field">
+    <p class="Field-title">
       color <span class="ColorPicker-idx">x</span>
     </p>
 

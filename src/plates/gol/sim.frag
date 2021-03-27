@@ -24,12 +24,15 @@ void main() {
     get(vec2( 1.0,  1.0))
   );
 
+  vec4 s;
   if (sum == 3) {
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    s = vec4(1.0, 1.0, 1.0, 1.0);
   } else if (sum == 2) {
     float current = float(get(vec2(0.0, 0.0)));
-    gl_FragColor = vec4(current, current, current, 1.0);
+    s = vec4(current, current, current, 1.0);
   } else {
-    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    s = vec4(0.0, 0.0, 0.0, 1.0);
   }
+
+  gl_FragColor = s;
 }

@@ -1,6 +1,7 @@
 import { loadEl, loadAssets } from "./load.js"
-import { init as initView, sim, draw, poke, getCanvas, setTheme, setPlate } from "./view.js"
+import { init as initView, sim, draw, poke, getCanvas, setTheme, setPlate, setData } from "./view.js"
 import { init as initColors, getEl as getColorsEl, getColors } from "./colors.js"
+import { init as initPlates, getPlate } from "./plates.js"
 
 // -- constants --
 const kFrameScale = 60 / 15
@@ -10,20 +11,26 @@ let mTime = null
 let mFrame = 0
 
 // -- p/els
-let $mOptions
+let $mOptions = null
+let $mDataInputs = []
 
 // -- lifetime --
 function main(assets) {
   console.debug("start")
 
-  // initialize
+  // capture els
   $mOptions = document.getElementById("options")
+  $mDataInputs = document.querySelectorAll("#data input")
+
+  // initialize
   initView("canvas", assets)
   initColors([0, 1])
+  initPlates()
   initEvents()
 
-  // initial theme
+  // set default options
   syncTheme()
+  syncPlate()
 
   // start loop
   loop()
@@ -50,6 +57,30 @@ function spawn(evt) {
   )
 }
 
+function syncData() {
+  // roll up data
+  const data = {}
+  for (const $el of $mDataInputs) {
+    data[$el.name] = Number.parseInt($el.value)
+  }
+
+  // apply to view
+  setData(data)
+}
+
+function syncPlate() {
+  const plate = getPlate()
+
+  // set default values on inputs
+  for (const $field of $mDataInputs) {
+    $field.value = plate.getData($field.name)
+  }
+
+  // apply to view
+  setPlate(plate)
+  syncData()
+}
+
 function syncTheme() {
   setTheme(getColors())
 }
@@ -63,6 +94,9 @@ function isSimFrame() {
 function initEvents() {
   const $plates = document.getElementById("plates")
   $plates.addEventListener("input", didChangePlate)
+
+  const $data = document.getElementById("data")
+  $data.addEventListener("input", didChangeData)
 
   const $colors = getColorsEl()
   $colors.addEventListener("input", didChangeColors)
@@ -92,8 +126,12 @@ function didMoveMouse(evt) {
 }
 
 // -- e/options
-function didChangePlate(evt) {
-  setPlate(evt.target.value)
+function didChangePlate(_evt) {
+  syncPlate()
+}
+
+function didChangeData(_evnt) {
+  syncData()
 }
 
 function didChangeColors(_evt) {
