@@ -1,7 +1,9 @@
 import { loadEl, loadAssets } from "./load.js"
 import { init as initView, sim, draw, poke, getCanvas, setTheme, setPlate, setData, randomize, reset } from "./view.js"
-import { init as initColors, getEl as getColorsEl, getColors } from "./colors.js"
 import { init as initPlates, getPlate } from "./plates.js"
+import { init as initPokes } from "./pokes.js"
+import { init as initColors, getEl as getColorsEl, getColors } from "./colors.js"
+import { init as initDatas, setDataFromPlate, getData } from "./datas.js"
 
 // -- constants --
 const kFrameScale = 60 / 15
@@ -25,7 +27,9 @@ function main(assets) {
   // initialize
   initView("canvas", assets)
   initColors([0, 1])
+  initPokes()
   initPlates()
+  initDatas()
   initEvents()
 
   // set default options
@@ -58,23 +62,14 @@ function spawn(evt) {
 }
 
 function syncData() {
-  // roll up data
-  const data = {}
-  for (const $el of $mDataInputs) {
-    data[$el.name] = Number.parseInt($el.value)
-  }
-
-  // apply to view
-  setData(data)
+  setData(getData())
 }
 
 function syncPlate() {
   const plate = getPlate()
 
   // set default values on inputs
-  for (const $field of $mDataInputs) {
-    $field.value = plate.getData($field.name)
-  }
+  setDataFromPlate(plate)
 
   // apply to view
   setPlate(plate)

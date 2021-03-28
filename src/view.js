@@ -13,7 +13,7 @@ const kQuad = new Float32Array([
 
 // -- c/theme
 const kWhiteColor = new Float32Array([1.00, 1.00, 1.00, 1.00])
-const kMagentaColor = new Float32Array([1.00, 0.00, 1.00, 1.00])
+const kErrorColor = new Float32Array([1.00, 0.00, 1.00, 1.00])
 
 // -- c/state
 const kNoColor = [0, 0, 0, 255]
@@ -563,5 +563,5 @@ function getThemeColor(i) {
     return kWhiteColor
   }
 
-  return mTheme[i] || kMagentaColor
+  return mTheme[i] || kErrorColor
 }

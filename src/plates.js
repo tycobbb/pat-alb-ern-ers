@@ -1,3 +1,5 @@
+import { renderValues } from "./utils.js"
+
 // -- constants --
 const kPlates = {
   ...initPlate({
@@ -20,12 +22,27 @@ const kPlates = {
   }),
 }
 
+const kTemplate = `
+  <div class="Select">
+    <select id="plate" class="Select-input">
+      ${renderValues(kPlates, (p) => `
+        <option value="${p.name}">${p.name}</option>
+      `)}
+    </select>
+  </div>
+`
+
 // -- props --
 let $mPlate = null
 
 // -- lifetime --
 export function init() {
-  $mPlate = document.getElementById("plate")
+  // render select
+  const $mPlates = document.getElementById("plates")
+  $mPlates.innerHTML = kTemplate
+
+  // cache input
+  $mPlate = $mPlates.querySelector("#plate")
 }
 
 function initPlate(props) {
