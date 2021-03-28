@@ -1,9 +1,9 @@
 import { loadEl, loadAssets } from "./load.js"
-import { init as initView, sim, draw, poke, getCanvas, setTheme, setPlate, setData, randomize, reset } from "./view.js"
-import { init as initPlates, getPlate } from "./plates.js"
-import { init as initPokes } from "./pokes.js"
-import { init as initColors, getEl as getColorsEl, getColors } from "./colors.js"
-import { init as initDatas, setDataFromPlate, getData } from "./datas.js"
+import { init as initView, sim, draw, poke, getCanvas, setTheme, setPlate, setData, randomize, reset, setPoke } from "./view.js"
+import { init as initPlates, onPlateChanged } from "./plates.js"
+import { init as initPokes, setPokeFromPlate, onPokeChanged } from "./pokes.js"
+import { init as initColors, onColorsChanged } from "./colors.js"
+import { init as initDatas, setDataFromPlate, onDataChanged } from "./datas.js"
 
 // -- constants --
 const kFrameScale = 60 / 15
@@ -32,10 +32,6 @@ function main(assets) {
   initDatas()
   initEvents()
 
-  // set default options
-  syncTheme()
-  syncPlate()
-
   // start loop
   loop()
 }
@@ -61,23 +57,25 @@ function spawn(evt) {
   )
 }
 
-function syncData() {
-  setData(getData())
-}
-
-function syncPlate() {
-  const plate = getPlate()
-
-  // set default values on inputs
-  setDataFromPlate(plate)
-
+function syncPlate(plate) {
   // apply to view
   setPlate(plate)
-  syncData()
+
+  // set default values on inputs
+  setPokeFromPlate(plate)
+  setDataFromPlate(plate)
 }
 
-function syncTheme() {
-  setTheme(getColors())
+function syncPoke(poke) {
+  setPoke(poke)
+}
+
+function syncTheme(theme) {
+  setTheme(theme)
+}
+
+function syncData(data) {
+  setData(data)
 }
 
 // -- queries --
@@ -87,20 +85,18 @@ function isSimFrame() {
 
 // -- events --
 function initEvents() {
-  const $plates = document.getElementById("plates")
-  $plates.addEventListener("input", didChangePlate)
+  // synchronize data
+  onPlateChanged(syncPlate)
+  onPokeChanged(syncPoke)
+  onColorsChanged(syncTheme)
+  onDataChanged(syncData)
 
-  const $data = document.getElementById("data")
-  $data.addEventListener("input", didChangeData)
-
-  const $colors = getColorsEl()
-  $colors.addEventListener("input", didChangeColors)
-
+  // add mouse events
   const $canvas = getCanvas()
   $canvas.addEventListener("click", didClickMouse)
   $canvas.addEventListener("mousemove", didMoveMouse)
 
-  // keyboard
+  // add keyboard events
   document.addEventListener("keydown", didPressKey)
 }
 
@@ -130,19 +126,6 @@ function didPressKey(evt) {
   } else if (evt.key === "r") {
     reset()
   }
-}
-
-// -- e/options
-function didChangePlate(_evt) {
-  syncPlate()
-}
-
-function didChangeData(_evnt) {
-  syncData()
-}
-
-function didChangeColors(_evt) {
-  syncTheme()
 }
 
 // -- boostrap --

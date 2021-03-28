@@ -4,18 +4,21 @@ import { renderValues } from "./utils.js"
 const kPlates = {
   ...initPlate({
     name: "gol",
+    poke: "glider",
     data: {
       int0: 0,
     },
   }),
   ...initPlate({
     name: "bar",
+    poke: "square",
     data: {
       int0: 5,
     },
   }),
   ...initPlate({
     name: "v-3",
+    poke: "square",
     data: {
       int0: 5,
     },
@@ -33,7 +36,7 @@ const kTemplate = `
 `
 
 // -- props --
-let $mPlate = null
+let $mInput = null
 
 // -- lifetime --
 export function init() {
@@ -42,7 +45,7 @@ export function init() {
   $mPlates.innerHTML = kTemplate
 
   // cache input
-  $mPlate = $mPlates.querySelector("#plate")
+  $mInput = $mPlates.querySelector("#plate")
 }
 
 function initPlate(props) {
@@ -58,7 +61,16 @@ function initPlate(props) {
   }
 }
 
+// -- commands --
+export function onPlateChanged(action) {
+  action(getPlate())
+
+  $mInput.addEventListener("input", () => {
+    action(getPlate())
+  })
+}
+
 // -- queries --
-export function getPlate() {
-  return kPlates[$mPlate.value]
+function getPlate() {
+  return kPlates[$mInput.value]
 }

@@ -15,12 +15,13 @@ const kTemplate = `
 `
 
 // -- props --
+let $mData = null
 let $mInputs = null
 
 // -- lifetime --
 export function init() {
   // render select
-  const $mData = document.getElementById("data")
+  $mData = document.getElementById("data")
   $mData.innerHTML = kTemplate
 
   // cache input
@@ -28,14 +29,24 @@ export function init() {
 }
 
 // -- commands --
+export function onDataChanged(action) {
+  action(getData())
+
+  $mData.addEventListener("input", () => {
+    action(getData())
+  })
+}
+
 export function setDataFromPlate(plate) {
   for (const $input of $mInputs) {
     $input.value = plate.getData($input.name)
   }
+
+  $mData.dispatchEvent(new InputEvent("input"))
 }
 
 // -- queries --
-export function getData() {
+function getData() {
   const data = {}
 
   // roll up inputs

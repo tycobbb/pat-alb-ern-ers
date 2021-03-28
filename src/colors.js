@@ -62,6 +62,14 @@ export function init(colors) {
 }
 
 // -- commands --
+export function onColorsChanged(action) {
+  action(getColors())
+
+  $mColors.addEventListener("input", () => {
+    action(getColors())
+  })
+}
+
 export function addColors(colors = []) {
   let i = 0
   for (const color of colors) {
@@ -105,11 +113,7 @@ function setPickerColor($el, color) {
 }
 
 // -- queries --
-export function getEl() {
-  return $mColors
-}
-
-export function getColors() {
+function getColors() {
   return Array.from($mColors.children).map(($el) => {
     return $el.getAttribute("color")
   })

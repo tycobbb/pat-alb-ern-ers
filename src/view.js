@@ -19,12 +19,6 @@ const kErrorColor = new Float32Array([1.00, 0.00, 1.00, 1.00])
 const kNoColor = [0, 0, 0, 255]
 const kOnColor = [255, 255, 255, 255]
 
-const kGlider = initSubImage([
-  0, 1, 0,
-  0, 0, 1,
-  1, 1, 1,
-])
-
 // -- props -
 let mCanvas = null
 let mGl = null
@@ -33,6 +27,7 @@ let mSize = null
 let mSimSize = null
 let mPlate = null
 let mTheme = null
+let mPoke = null
 let mData = null
 
 // -- p/gl
@@ -227,6 +222,10 @@ export function setPlate(plate) {
   syncShaderDescs()
 }
 
+export function setPoke(poke) {
+  mPoke = poke
+}
+
 export function setData(data) {
   mData = data
 }
@@ -323,18 +322,21 @@ function pokeTexture(x0, y0) {
   // assume coord is oriented around screen space (top-left) and flip y
   const y1 = mSimSize.h - y0
 
+  // get image data from poke
+  const image = mPoke.getImage(initSubImage)
+
   // spawn a glider at this coordinate
   gl.bindTexture(gl.TEXTURE_2D, mTextures.curr);
   gl.texSubImage2D(
     gl.TEXTURE_2D,
     0,                // lod, mipmap,
-    x0 - 1,           // x-offset
-    y1 - 1,           // y-offset
-    3,                // width
-    3,                // height
+    x0 - mPoke.w2,    // x-offset
+    y1 - mPoke.h2,    // y-offset
+    mPoke.w,          // width
+    mPoke.h,          // height
     gl.RGBA,          // color component format
     gl.UNSIGNED_BYTE, // component data type
-    kGlider,          // source
+    image,            // source
   )
 }
 

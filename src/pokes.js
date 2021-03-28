@@ -4,10 +4,8 @@ import { renderValues } from "./utils.js"
 const kPokes = {
   ...initPoke({
     name: "glider",
-    size: {
-      x: 3,
-      y: 3,
-    },
+    w: 3,
+    h: 3,
     data: [
       0, 1, 0,
       0, 0, 1,
@@ -16,10 +14,8 @@ const kPokes = {
   }),
   ...initPoke({
     name: "square",
-    size: {
-      x: 3,
-      y: 3,
-    },
+    w: 3,
+    h: 3,
     data: [
       1, 1, 1,
       1, 1, 1,
@@ -28,10 +24,8 @@ const kPokes = {
   }),
   ...initPoke({
     name: "circle",
-    size: {
-      x: 4,
-      y: 4,
-    },
+    w: 4,
+    h: 4,
     data: [
       0, 1, 1, 0,
       1, 1, 1, 1,
@@ -52,7 +46,7 @@ const kTemplate = `
 `
 
 // -- props --
-let $mPoke = null
+let $mInput = null
 
 // -- lifetime --
 export function init() {
@@ -61,15 +55,25 @@ export function init() {
   $mPokes.innerHTML = kTemplate
 
   // cache input
-  $mPoke = $mPokes.querySelector("#poke")
+  $mInput = $mPokes.querySelector("#poke")
 }
 
 function initPoke(props) {
   const plate = {
     ...props,
-    getData(name) {
-      return this.data[name]
-    }
+    getImage(render) {
+      if (!this.image) {
+        this.image = render(this.data)
+      }
+
+      return this.image
+    },
+    get w2() {
+      return Math.trunc(this.w / 2)
+    },
+    get h2() {
+      return Math.trunc(this.h / 2)
+    },
   }
 
   return {
@@ -77,7 +81,23 @@ function initPoke(props) {
   }
 }
 
+// -- commands --
+export function onPokeChanged(action) {
+  action(getPoke())
+
+  $mInput.addEventListener("input", () => {
+    action(getPoke())
+  })
+}
+
+export function setPokeFromPlate(plate) {
+  const name = plate.poke in kPokes ? plate.poke : "glider"
+  $mInput.value = name
+
+  $mInput.dispatchEvent(new InputEvent("input"))
+}
+
 // -- queries --
-export function getPoke() {
-  return kPokes[$mPoke.value]
+function getPoke() {
+  return kPokes[$mInput.value]
 }
