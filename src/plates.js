@@ -7,6 +7,12 @@ const kPlates = {
     },
   }),
   ...initPlate({
+    name: "bar",
+    data: {
+      int0: 5,
+    },
+  }),
+  ...initPlate({
     name: "v-3",
     data: {
       int0: 5,

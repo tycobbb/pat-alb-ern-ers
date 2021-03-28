@@ -171,6 +171,16 @@ function didChangeColors(_evt) {
             frag: p("gol/draw.frag"),
           },
         },
+        ["bar"]: {
+          sim: {
+            vert: p("bar/sim.vert"),
+            frag: p("bar/sim.frag"),
+          },
+          draw: {
+            vert: p("bar/draw.vert"),
+            frag: p("bar/draw.frag"),
+          },
+        },
         ["v-3"]: {
           sim: {
             vert: p("v-3/sim.vert"),

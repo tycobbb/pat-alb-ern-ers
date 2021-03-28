@@ -2,44 +2,49 @@
 precision mediump float;
 #endif
 
+// -- types --
+struct cell_t {
+  int color;
+  float sampl;
+};
+
+float rand(vec2 co){
+  return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+}
+
 // -- uniforms --
 uniform sampler2D uState;
 uniform vec2 uScale;
 uniform int uInt0;
 
 // -- helpers --
-int get(vec2 offset) {
-  return int(texture2D(uState, (gl_FragCoord.xy + offset) / uScale).r);
+cell_t get(int x, int y) {
+  vec2 offset = vec2(float(x), float(y));
+  vec4 data = texture2D(uState, (gl_FragCoord.xy + offset) / uScale);
+
+  cell_t c;
+  c.color = int(data.r);
+  c.sampl = data.b;
+
+  return c;
+}
+
+void set(int color, float sampl) {
+  gl_FragColor = vec4(float(color), 1.0, sampl, 1.0);
 }
 
 // -- program --
 void main() {
-  int i0 = (uInt0 - 1) / -2; // -1
+  cell_t p = get(-1, 0);
 
-  int friend = 0;
-  for (int i = 0; i < 8; i++) {
-    if (i >= uInt0) {
-      break;
-    }
-
-    int ii = i0 + i;
-    friend += get(vec2(-1.0, ii));
+  if (p.color == 1 && p.sampl > 0.1) {
+    set(p.color, p.sampl * 0.9);
+    return;
   }
 
-  int foe = (
-    get(vec2(-1.0, i0 - 1)) +
-    get(vec2(-1.0, i0 + uInt0))
-  );
-
-  vec4 s;
-  if (foe != 0) {
-    s = vec4(0.0, 0.0, 0.0, 0.0);
-  } else if (friend >= 2) {
-    s = vec4(1.0, 1.0, 1.0, 1.0);
+  if (get(0, -1).color == 1 || get(0, 1).color == 1) {
+    set(1, p.sampl);
   } else {
-    float current = float(get(vec2(0.0, 0.0)));
-    s = vec4(current, current, current, 1.0);
+    set(get(0, 0).color, 0.0);
   }
-
-  gl_FragColor = s;
 }
