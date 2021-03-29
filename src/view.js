@@ -90,6 +90,10 @@ export function init(id, assets) {
 
 // -- commands --
 export function sim(time) {
+  if (mPlate != null && mPlate.name == "stp") {
+    return;
+  }
+
   const gl = mGl
   const sd = mShaderDescs.sim
 

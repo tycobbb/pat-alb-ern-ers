@@ -18,7 +18,7 @@ void main() {
   vec4 data = texture2D(uState, gl_FragCoord.xy / uScale);
 
   // map r channel into a color index
-  int i = int((1.0 - data.r) * 10.0);
+  int i = int((1.0 - data.r) * 10.0 + 0.1);
 
   // pick color
   vec4 c;
@@ -33,6 +33,14 @@ void main() {
   } else {
     c = vColor;
   }
+
+  // debug color
+  // vec4 c;
+  // if (data.r == 0.0) {
+  //   c = vColor;
+  // } else {
+  //   c = vec4(data.r, data.r, data.r, 1.0);
+  // }
 
   // set output color
   gl_FragColor = c;

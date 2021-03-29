@@ -3,9 +3,11 @@ const kColors = [
   "#b68a5b",
   "#b86661",
   "#63a5af",
-  "#ff00ff",
-  "#00ffff",
-  "#ffff00",
+  "#110d41",
+  "#d461a0",
+  "#dd697e",
+  "#dd7f6e",
+  "#e88259",
 ]
 
 const kTemplate = `
@@ -61,7 +63,7 @@ export function init() {
   $mTemplate = $el.firstElementChild
 
   // add initial colors
-  addColors([0, 0, 1, 1, 2, 3, 4, 5])
+  addColors([3, 3, 1, 1, 7, 6, 5, 4])
 }
 
 // -- commands --
