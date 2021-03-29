@@ -335,10 +335,10 @@ function seedTexture() {
   // assign a random value to each cell
   const seed = new Uint8Array(size)
   for (let i = 0; i < size; i += 4) {
-    const val = Math.random() > 0.5 ? 255 : 0
+    const val = Math.random() > 0.5 ? getRandSimColor() : 0
     seed[i + 0] = val // r
-    seed[i + 1] = val // g
-    seed[i + 2] = val // b
+    seed[i + 1] = 0   // g
+    seed[i + 2] = 0   // b
     seed[i + 3] = 255 // a
   }
 
@@ -424,10 +424,11 @@ function initTexture() {
 function initSubImage(cells) {
   const image = []
   const sampl = Math.random() * 255
+  const color = getRandSimColor()
 
   for (const cell of cells) {
     if (cell === 1) {
-      image.push(255, 0, 0, sampl)
+      image.push(color, 0, 0, sampl)
     } else {
       image.push(0, 0, 0, 0)
     }
@@ -633,6 +634,10 @@ function initSize(w, h) {
 // -- queries --
 export function getCanvas() {
   return mCanvas
+}
+
+function getRandSimColor() {
+  return (0.62 + Math.random() * 0.38) * 255
 }
 
 function getFgColor(i) {

@@ -24,7 +24,7 @@ cell_t get(int x, int y) {
   vec4 data = texture2D(uState, (gl_FragCoord.xy + delt) / uScale);
 
   cell_t c;
-  c.clr = data.r;
+  c.clr = data.r > 0.0 ? 1.0 : 0.0;
   c.smp = data.g;
   c.rnd = data.a;
 

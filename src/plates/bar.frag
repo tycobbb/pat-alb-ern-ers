@@ -13,7 +13,7 @@ uniform float uFloat0;
 int get(int x, int y) {
   vec2 delt = vec2(float(x), float(y));
   vec4 data = texture2D(uState, (gl_FragCoord.xy + delt) / uScale);
-  return int(data.r);
+  return data.r > 0.0 ? 1 : 0;
 }
 
 void set(float clr) {

@@ -1,5 +1,5 @@
 #ifdef GL_ES
-precision highp float;
+precision mediump float;
 #endif
 
 // -- constants --
@@ -25,7 +25,7 @@ int get(int x, int y) {
 
 void set(int i) {
   float color;
-  if (i == kNilC || i < 0) {
+  if (i > kMaxC || i < 0) {
     color = 0.0;
   } else {
     color = float(10 - i) * 0.1;
