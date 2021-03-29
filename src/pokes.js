@@ -61,13 +61,6 @@ export function init() {
 function initPoke(props) {
   const plate = {
     ...props,
-    getImage(render) {
-      if (!this.image) {
-        this.image = render(this.data)
-      }
-
-      return this.image
-    },
     get w2() {
       return Math.trunc(this.w / 2)
     },

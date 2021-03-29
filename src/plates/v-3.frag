@@ -4,47 +4,50 @@ precision mediump float;
 
 // -- types --
 struct cell_t {
-  int color;
-  float sampl;
+  float clr;
+  float smp;
+  float rnd;
 };
-
-float rand(vec2 co){
-  return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
-}
 
 // -- uniforms --
 uniform sampler2D uState;
 uniform vec2 uScale;
-uniform int uInt0;
+
+// -- u/data
+uniform highp float uFloat0;
+uniform highp float uFloat1;
 
 // -- helpers --
 cell_t get(int x, int y) {
-  vec2 offset = vec2(float(x), float(y));
-  vec4 data = texture2D(uState, (gl_FragCoord.xy + offset) / uScale);
+  vec2 delt = vec2(float(x), float(y));
+  vec4 data = texture2D(uState, (gl_FragCoord.xy + delt) / uScale);
 
   cell_t c;
-  c.color = int(data.r);
-  c.sampl = data.b;
+  c.clr = data.r;
+  c.smp = data.g;
+  c.rnd = data.a;
+
+  if (c.rnd != 1.0) {
+    c.smp = max(c.rnd, uFloat0);
+  }
 
   return c;
 }
 
-void set(int color, float sampl) {
-  gl_FragColor = vec4(float(color), 1.0, sampl, 1.0);
+void set(float clr, float smp) {
+  gl_FragColor = vec4(clr, smp, 1.0, 1.0);
 }
 
 // -- program --
 void main() {
-  cell_t p = get(-1, 0);
+  cell_t c;
+  cell_t n = get(-1, 0);
 
-  if (p.color == 1 && p.sampl > 0.1) {
-    set(p.color, p.sampl * 0.9);
+  if (n.clr == 1.0 && n.smp > 0.1) {
+    set(n.clr, n.smp * uFloat1);
     return;
   }
 
-  if (get(0, -1).color == 1 || get(0, 1).color == 1) {
-    set(1, p.sampl);
-  } else {
-    set(get(0, 0).color, 0.0);
-  }
+  c = get(0, 0);
+  set(c.clr, c.smp);
 }

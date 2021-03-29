@@ -5,7 +5,9 @@ precision mediump float;
 // -- uniforms --
 uniform sampler2D uState;
 uniform vec2 uScale;
-uniform int uInt0;
+
+// -- u/data
+uniform float uFloat0;
 
 // -- helpers --
 int get(vec2 offset) {
@@ -19,11 +21,12 @@ void set(int color) {
 
 // -- program --
 void main() {
-  int i0 = (uInt0 - 1) / -2; // -1
+  int h = int(uFloat0);
+  int i0 = (h - 1) / -2;
 
   int friend = 0;
   for (int i = 0; i < 16; i++) {
-    if (i >= uInt0) {
+    if (i >= h) {
       break;
     }
 
@@ -33,7 +36,7 @@ void main() {
 
   int foe = (
     get(vec2(-1.0, i0 - 1)) +
-    get(vec2(-1.0, i0 + uInt0))
+    get(vec2(-1.0, i0 + h))
   );
 
   if (foe != 0) {

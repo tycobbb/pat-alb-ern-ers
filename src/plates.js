@@ -6,21 +6,24 @@ const kPlates = {
     name: "gol",
     poke: "glider",
     data: {
-      int0: 0,
+      float0: 0.0,
+      float1: 0.0,
     },
   }),
   ...initPlate({
     name: "bar",
     poke: "square",
     data: {
-      int0: 5,
+      float0: 5.0,
+      float1: 0.0,
     },
   }),
   ...initPlate({
     name: "v-3",
     poke: "square",
     data: {
-      int0: 5,
+      float0: 0.70,
+      float1: 0.98,
     },
   }),
 }

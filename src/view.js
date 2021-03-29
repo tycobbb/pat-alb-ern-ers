@@ -15,10 +15,6 @@ const kQuad = new Float32Array([
 const kWhiteColor = new Float32Array([1.00, 1.00, 1.00, 1.00])
 const kErrorColor = new Float32Array([1.00, 0.00, 1.00, 1.00])
 
-// -- c/state
-const kNoColor = [0, 0, 0, 255]
-const kOnColor = [255, 255, 255, 255]
-
 // -- props -
 let mCanvas = null
 let mGl = null
@@ -147,7 +143,7 @@ export function sim(_time) {
   for (const name in mPlate.data) {
     const loc = sd.uniforms.data[name]
     const val = mData[name] || mPlate.getData(name)
-    gl.uniform1i(loc, val)
+    gl.uniform1f(loc, val)
   }
 
   // "draw" simulation
@@ -259,7 +255,6 @@ export function setColors(colors) {
   gl.bindBuffer(gl.ARRAY_BUFFER, mBuffers.color)
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, dColors)
 
-
   // update foreground colors
   const fg = colors.fg
   mFg = fg.map((hex) => {
@@ -354,7 +349,7 @@ function pokeTexture(x0, y0) {
   const y1 = mSimSize.h - y0
 
   // get image data from poke
-  const image = mPoke.getImage(initSubImage)
+  const image = initSubImage(mPoke.data)
 
   // spawn a glider at this coordinate
   gl.bindTexture(gl.TEXTURE_2D, mTextures.curr);
@@ -412,12 +407,13 @@ function initTexture() {
 
 function initSubImage(cells) {
   const image = []
+  const sampl = Math.random() * 255
 
   for (const cell of cells) {
     if (cell === 1) {
-      image.push(...kOnColor)
+      image.push(255, 0, 0, sampl)
     } else {
-      image.push(...kNoColor)
+      image.push(0, 0, 0, 0)
     }
   }
 
@@ -460,7 +456,8 @@ function initShaderDescs(assets) {
         state: gl.getUniformLocation(program, "uState"),
         scale: gl.getUniformLocation(program, "uScale"),
         data: {
-          int0: gl.getUniformLocation(program, "uInt0"),
+          float0: gl.getUniformLocation(program, "uFloat0"),
+          float1: gl.getUniformLocation(program, "uFloat1")
         },
       },
     })),

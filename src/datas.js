@@ -2,7 +2,8 @@ import { renderValues } from "./utils.js"
 
 // -- constants --
 const kDatas = [
-  "int0"
+  "float0",
+  "float1",
 ]
 
 const kTemplate = `
@@ -51,7 +52,7 @@ function getData() {
 
   // roll up inputs
   for (const $el of $mInputs) {
-    data[$el.name] = Number.parseInt($el.value)
+    data[$el.name] = $el.value
   }
 
   return data
