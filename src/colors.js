@@ -114,9 +114,14 @@ function setPickerColor($el, color) {
 
 // -- queries --
 function getColors() {
-  return Array.from($mColors.children).map(($el) => {
+  const colors = Array.from($mColors.children).map(($el) => {
     return $el.getAttribute("color")
   })
+
+  return {
+    bg: colors.slice(0, 4),
+    fg: colors.slice(4),
+  }
 }
 
 function getColorHex($el, color) {

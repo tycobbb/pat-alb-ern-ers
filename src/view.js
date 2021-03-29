@@ -26,9 +26,12 @@ let mAssets = null
 let mSize = null
 let mSimSize = null
 let mPlate = null
-let mTheme = null
+let mFg = null
 let mPoke = null
 let mData = null
+
+// -- p/data
+let dColors = null
 
 // -- p/gl
 let mTextures = null
@@ -37,6 +40,11 @@ let mBuffers = null
 let mShaderDescs = null
 
 // -- lifetime --
+export function initData() {
+  dColors = new Float32Array(4 * 4);
+  dColors.set([...kErrorColor, ...kWhiteColor, ...kErrorColor, ...kWhiteColor], 0)
+}
+
 export function init(id, assets) {
   // set props
   mCanvas = document.getElementById(id)
@@ -112,11 +120,11 @@ export function sim(_time) {
   gl.bindBuffer(gl.ARRAY_BUFFER, mBuffers.pos)
   gl.vertexAttribPointer(
     sd.attribs.pos, // location
-    2,                       // n components per vec
-    gl.FLOAT,                // data type of component
-    false,                   // normalize?
-    0,                       // stride, n bytes per item; 0 = use n components * type size (2 * 4)
-    0,                       // offset, start pos in bytes
+    2,              // n components per vec
+    gl.FLOAT,       // data type of component
+    false,          // normalize?
+    0,              // stride, n bytes per item; 0 = use n components * type size (2 * 4)
+    0,              // offset, start pos in bytes
   )
 
   gl.enableVertexAttribArray(sd.attribs.pos)
@@ -171,7 +179,7 @@ export function draw() {
   // sample from the current texture (state)
   gl.bindTexture(gl.TEXTURE_2D, mTextures.curr)
 
-  // conf pos shader attrib (translate buffer > vec)
+  // conf pos attrib (map buffer -> vecs)
   gl.bindBuffer(gl.ARRAY_BUFFER, mBuffers.pos)
   gl.vertexAttribPointer(
     sd.attribs.pos, // location
@@ -183,6 +191,19 @@ export function draw() {
   )
 
   gl.enableVertexAttribArray(sd.attribs.pos)
+
+  // conf vertex color attrib (map buffer -> vecs)
+  gl.bindBuffer(gl.ARRAY_BUFFER, mBuffers.color)
+  gl.vertexAttribPointer(
+    sd.attribs.color, // location
+    4,                // n components per vec
+    gl.FLOAT,         // data type of component
+    false,            // normalize?
+    0,                // stride, n bytes per item; 0 = use n components * type size (2 * 4)
+    0,                // offset, start pos in bytes
+  )
+
+  gl.enableVertexAttribArray(sd.attribs.color)
 
   // conf shader program
   gl.useProgram(sd.program)
@@ -200,13 +221,8 @@ export function draw() {
 
   // conf color uniforms
   gl.uniform4fv(
-    sd.uniforms.colors.bg,
-    getThemeColor(0),
-  )
-
-  gl.uniform4fv(
     sd.uniforms.colors.fg,
-    getThemeColor(1),
+    getFgColor(0),
   )
 
   // draw to screen
@@ -230,8 +246,23 @@ export function setData(data) {
   mData = data
 }
 
-export function setTheme(colors) {
-  mTheme = colors.map((hex) => {
+export function setColors(colors) {
+  const gl = mGl
+
+  // update background vert colors
+  const bg = colors.bg
+  for (let i = 0; i < bg.length; i++) {
+    const color = bg[i]
+    dColors.set(getRgbaFromHex(color), i * 4)
+  }
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, mBuffers.color)
+  gl.bufferSubData(gl.ARRAY_BUFFER, 0, dColors)
+
+
+  // update foreground colors
+  const fg = colors.fg
+  mFg = fg.map((hex) => {
     return new Float32Array(getRgbaFromHex(hex))
   })
 }
@@ -413,11 +444,15 @@ function initShaderDescs(assets) {
   }
 
   // grab shader src for this interaction
-  const srcs = mAssets.shaders[mPlate.name]
+  const srcs = mAssets.shaders
+  const srcsSim = {
+    vert: srcs.sim.vert,
+    frag: srcs.plates[mPlate.name]
+  }
 
   // compile and produce shader descs
   return {
-    sim: initShaderDesc(srcs.sim, (program) => ({
+    sim: initShaderDesc(srcsSim, (program) => ({
       attribs: {
         pos: gl.getAttribLocation(program, "aPos"),
       },
@@ -432,12 +467,12 @@ function initShaderDescs(assets) {
     draw: initShaderDesc(srcs.draw, (program) => ({
       attribs: {
         pos: gl.getAttribLocation(program, "aPos"),
+        color: gl.getAttribLocation(program, "aColor"),
       },
       uniforms: {
         state: gl.getUniformLocation(program, "uState"),
         scale: gl.getUniformLocation(program, "uScale"),
         colors: {
-          bg: gl.getUniformLocation(program, "uBgColor"),
           fg: gl.getUniformLocation(program, "uFgColor"),
         },
       },
@@ -514,15 +549,18 @@ function initBuffers() {
 
   // create pos buffer
   const pos = gl.createBuffer()
-
-  // define shape (quad)
-  // pass data into pos buffer
   gl.bindBuffer(gl.ARRAY_BUFFER, pos)
   gl.bufferData(gl.ARRAY_BUFFER, kQuad, gl.STATIC_DRAW)
+
+  // create vertex color buffer
+  const color = gl.createBuffer()
+  gl.bindBuffer(gl.ARRAY_BUFFER, color)
+  gl.bufferData(gl.ARRAY_BUFFER, dColors, gl.DYNAMIC_DRAW)
 
   // exports
   return {
     pos,
+    color,
   }
 }
 
@@ -560,10 +598,10 @@ export function getCanvas() {
   return mCanvas
 }
 
-function getThemeColor(i) {
-  if (mTheme == null) {
+function getFgColor(i) {
+  if (mFg == null) {
     return kWhiteColor
   }
 
-  return mTheme[i] || kErrorColor
+  return mFg[i] || kErrorColor
 }

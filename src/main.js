@@ -1,5 +1,5 @@
 import { loadEl, loadAssets } from "./load.js"
-import { init as initView, sim, draw, poke, getCanvas, setTheme, setPlate, setData, randomize, reset, setPoke } from "./view.js"
+import { init as initView, initData, sim, draw, poke, getCanvas, setColors, setPlate, setData, randomize, reset, setPoke } from "./view.js"
 import { init as initPlates, onPlateChanged } from "./plates.js"
 import { init as initPokes, setPokeFromPlate, onPokeChanged } from "./pokes.js"
 import { init as initColors, onColorsChanged } from "./colors.js"
@@ -25,8 +25,9 @@ function main(assets) {
   $mDataInputs = document.querySelectorAll("#data input")
 
   // initialize
+  initData()
   initView("canvas", assets)
-  initColors([0, 1])
+  initColors([0, 0, 0, 0, 1])
   initPokes()
   initPlates()
   initDatas()
@@ -71,7 +72,7 @@ function syncPoke(poke) {
 }
 
 function syncTheme(theme) {
-  setTheme(theme)
+  setColors(theme)
 }
 
 function syncData(data) {
@@ -131,7 +132,7 @@ function didPressKey(evt) {
 // -- boostrap --
 (async function load() {
   function p(path) {
-    return `./src/plates/${path}`
+    return `./src/${path}`
   }
 
   // wait for the window and all assets
@@ -139,37 +140,21 @@ function didPressKey(evt) {
     loadEl(window),
     loadAssets({
       shaders: {
-        ["gol"]: {
-          sim: {
-            vert: p("gol/sim.vert"),
-            frag: p("gol/sim.frag"),
-          },
-          draw: {
-            vert: p("gol/draw.vert"),
-            frag: p("gol/draw.frag"),
-          },
+        // shared
+        sim: {
+          vert: p("sim/sim.vert"),
         },
-        ["bar"]: {
-          sim: {
-            vert: p("bar/sim.vert"),
-            frag: p("bar/sim.frag"),
-          },
-          draw: {
-            vert: p("bar/draw.vert"),
-            frag: p("bar/draw.frag"),
-          },
+        draw: {
+          vert: p("draw/draw.vert"),
+          frag: p("draw/draw.frag"),
         },
-        ["v-3"]: {
-          sim: {
-            vert: p("v-3/sim.vert"),
-            frag: p("v-3/sim.frag"),
-          },
-          draw: {
-            vert: p("v-3/draw.vert"),
-            frag: p("v-3/draw.frag"),
-          },
-        }
-      }
+        // plates
+        plates: {
+          ["gol"]: p("plates/gol.frag"),
+          ["bar"]: p("plates/bar.frag"),
+          ["v-3"]: p("plates/v-3.frag"),
+        },
+      },
     })
   ])
 
