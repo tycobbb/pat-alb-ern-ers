@@ -10,13 +10,14 @@ uniform vec2 uScale;
 uniform float uFloat0;
 
 // -- helpers --
-int get(vec2 offset) {
-  vec4 data = texture2D(uState, (gl_FragCoord.xy + offset) / uScale);
+int get(int x, int y) {
+  vec2 delt = vec2(float(x), float(y));
+  vec4 data = texture2D(uState, (gl_FragCoord.xy + delt) / uScale);
   return int(data.r);
 }
 
-void set(int color) {
-  gl_FragColor = vec4(float(color), 0.0, 0.0, 1.0);
+void set(float clr) {
+  gl_FragColor = vec4(clr, 0.0, 0.0, 1.0);
 }
 
 // -- program --
@@ -31,19 +32,19 @@ void main() {
     }
 
     int ii = i0 + i;
-    friend += get(vec2(-1.0, ii));
+    friend += get(-1, ii);
   }
 
   int foe = (
-    get(vec2(-1.0, i0 - 1)) +
-    get(vec2(-1.0, i0 + h))
+    get(-1, i0 - 1) +
+    get(-1, i0 + h)
   );
 
   if (foe != 0) {
-    set(0);
+    set(0.0);
   } else if (friend >= 2) {
-    set(1);
+    set(1.0);
   } else {
-    set(get(vec2(0.0, 0.0)));
+    set(float(get(0, 0)));
   }
 }

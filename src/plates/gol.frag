@@ -7,32 +7,34 @@ uniform sampler2D uState;
 uniform vec2 uScale;
 
 // -- helpers --
-int get(vec2 offset) {
-  return int(texture2D(uState, (gl_FragCoord.xy + offset) / uScale).r);
+int get(int x, int y) {
+  vec2 delt = vec2(float(x), float(y));
+  vec4 data = texture2D(uState, (gl_FragCoord.xy + delt) / uScale);
+  return int(data.r);
+}
+
+void set(float clr) {
+  gl_FragColor = vec4(clr, 0.0, 0.0, 1.0);
 }
 
 // -- program --
 void main() {
   int sum = (
-    get(vec2(-1.0, -1.0)) +
-    get(vec2(-1.0,  0.0)) +
-    get(vec2(-1.0,  1.0)) +
-    get(vec2( 0.0, -1.0)) +
-    get(vec2( 0.0,  1.0)) +
-    get(vec2( 1.0, -1.0)) +
-    get(vec2( 1.0,  0.0)) +
-    get(vec2( 1.0,  1.0))
+    get(-1, -1) +
+    get(-1, +0) +
+    get(-1, +1) +
+    get(+0, -1) +
+    get(+0, +1) +
+    get(+1, -1) +
+    get(+1, +0) +
+    get(+1, +1)
   );
 
-  vec4 s;
   if (sum == 3) {
-    s = vec4(1.0, 1.0, 1.0, 1.0);
+    set(1.0);
   } else if (sum == 2) {
-    float current = float(get(vec2(0.0, 0.0)));
-    s = vec4(current, current, current, 1.0);
+    set(float(get(0, 0)));
   } else {
-    s = vec4(0.0, 0.0, 0.0, 1.0);
+    set(0.0);
   }
-
-  gl_FragColor = s;
 }
