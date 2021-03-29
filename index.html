@@ -5,12 +5,15 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="-1" />
   <title>pat / alb / ern / ers</title>
-  <link href="./src/main.css?10" rel="stylesheet">
+  <link href="./src/main.css?11" rel="stylesheet">
   <script type="module" src="./src/main.js"></script>
 </head>
 
 <body>
-  <main class="Main">
+  <main id="main" class="Main">
+    <!-- toggle -->
+    <a id="ui-toggle" class="Main-toggle"></a>
+
     <!-- options -->
     <div class="Main-gutter">
       <section class="Options">
@@ -28,12 +31,6 @@
           <div id="pokes"></div>
         </section>
 
-        <!-- o/colors -->
-        <section class="Options-group">
-          <h2>colors</h2>
-          <div id="colors"></div>
-        </section>
-
         <!-- o/data -->
         <section class="Options-group">
           <h2>data</h2>
@@ -45,9 +42,12 @@
     <!-- canvas -->
     <canvas id="canvas" class="Main-canvas"></canvas>
 
-    <!-- cool gutter -->
+    <!-- colors -->
     <div class="Main-gutter">
-      <p>the other cool gutter</p>
+      <section class="Options">
+        <h1>colors</h1>
+        <div id="colors"></div>
+      </section>
     </div>
   </main>
 </body>

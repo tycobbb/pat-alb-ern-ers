@@ -13,21 +13,19 @@ let mTime = null
 let mFrame = 0
 
 // -- p/els
-let $mOptions = null
-let $mDataInputs = []
+let $mMain = null
 
 // -- lifetime --
 function main(assets) {
   console.debug("start")
 
   // capture els
-  $mOptions = document.getElementById("options")
-  $mDataInputs = document.querySelectorAll("#data input")
+  $mMain = document.getElementById("main")
 
   // initialize
   initData()
   initView("canvas", assets)
-  initColors([0, 0, 0, 0, 1])
+  initColors([0, 0, 1, 1, 2])
   initPokes()
   initPlates()
   initDatas()
@@ -99,6 +97,10 @@ function initEvents() {
 
   // add keyboard events
   document.addEventListener("keydown", didPressKey)
+
+  // add misc events
+  const $toggle = document.getElementById("ui-toggle")
+  $toggle.addEventListener("click", didClickUiToggle)
 }
 
 // -- e/mouse
@@ -127,6 +129,11 @@ function didPressKey(evt) {
   } else if (evt.key === "r") {
     reset()
   }
+}
+
+// -- e/misc
+function didClickUiToggle(evt) {
+  $mMain.classList.toggle("is-ui-hidden")
 }
 
 // -- boostrap --
