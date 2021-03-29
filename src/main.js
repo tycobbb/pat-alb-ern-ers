@@ -173,6 +173,8 @@ function didClickPause(evt) {
           ["gol"]: p("plates/gol.frag"),
           ["bar"]: p("plates/bar.frag"),
           ["sky"]: p("plates/sky.frag"),
+          ["dot"]: p("plates/dot.frag"),
+          ["swp"]: p("plates/swp.frag"),
         },
       },
     })

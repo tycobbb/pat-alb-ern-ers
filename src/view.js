@@ -76,6 +76,8 @@ export function init(id, assets) {
   // sync canvas el's attribute, webgl needs this
   mCanvas.width = mSize.w
   mCanvas.height = mSize.h
+  mCanvas.style.width = `${mSize.w}px`;
+  mCanvas.style.height = `${mSize.h}px`;
 
   // init gl props
   mTextures = initTextures()

@@ -22,6 +22,13 @@ const kPlates = {
       float2: 0.98,
     },
   }),
+  ...initPlate({
+    name: "dot",
+    poke: "point",
+  }),
+  ...initPlate({
+    name: "swp",
+  }),
 }
 
 const kTemplate = `
@@ -54,6 +61,7 @@ function initPlate(props) {
   } = props
 
   const plate = {
+    poke: "point",
     ...rest,
     data: {
       float0: 0.0,
