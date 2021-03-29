@@ -34,7 +34,7 @@ h2 {
   flex-direction: column;
   align-items: center;
   opacity: 1.0;
-  transition: opacity 0.2s
+  transition: opacity 0.05s
 }
 
 .Main.is-ui-hidden .Main-gutter {
@@ -127,7 +127,29 @@ h2 {
   font-family: unset;
 }
 
-/* title */
+/* Button */
+.Button {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0px;
+  border-bottom: 1px transparent dotted;
+}
+
+.Button:hover {
+  border-bottom-color: black;
+}
+
+.Button::after {
+  content: "<- click";
+  display: none;
+  font-family: monospace;
+}
+
+.Button:hover::after {
+  display: block;
+}
+
+/* ColorPicker */
 .ColorPicker-idx {
   font-family: monospace;
   font-weight: 600;

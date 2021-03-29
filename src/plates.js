@@ -14,7 +14,7 @@ const kPlates = {
     },
   }),
   ...initPlate({
-    name: "v-3",
+    name: "sky",
     poke: "point",
     data: {
       float0: 8,

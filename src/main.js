@@ -11,6 +11,7 @@ const kFrameScale = 60 / 15
 // -- props -
 let mTime = null
 let mFrame = 0
+let mIsPaused = false
 
 // -- p/els
 let $mMain = null
@@ -37,15 +38,18 @@ function main(assets) {
 
 // -- commands --
 function loop() {
-  mTime = performance.now() / 1000
+  if (!mIsPaused) {
+    mTime = performance.now() / 1000
 
-  // only run every kFrameScale frames
-  if (isSimFrame()) {
-    sim(mTime)
-    draw()
+    // only run every kFrameScale frames
+    if (isSimFrame()) {
+      sim(mTime)
+      draw()
+    }
+
+    mFrame++
   }
 
-  mFrame++
   requestAnimationFrame(loop)
 }
 
@@ -99,8 +103,11 @@ function initEvents() {
   document.addEventListener("keydown", didPressKey)
 
   // add misc events
-  const $toggle = document.getElementById("ui-toggle")
+  const $toggle = document.getElementById("toggle-ui")
   $toggle.addEventListener("click", didClickUiToggle)
+
+  const $pause = document.getElementById("pause")
+  $pause.addEventListener("click", didClickPause)
 }
 
 // -- e/mouse
@@ -132,8 +139,14 @@ function didPressKey(evt) {
 }
 
 // -- e/misc
-function didClickUiToggle(evt) {
+function didClickUiToggle(_evt) {
   $mMain.classList.toggle("is-ui-hidden")
+}
+
+function didClickPause(evt) {
+  mIsPaused = !mIsPaused
+  const $el = evt.target
+  $el.text = mIsPaused ? "unpause" : "pause"
 }
 
 // -- boostrap --
@@ -159,7 +172,7 @@ function didClickUiToggle(evt) {
         plates: {
           ["gol"]: p("plates/gol.frag"),
           ["bar"]: p("plates/bar.frag"),
-          ["v-3"]: p("plates/v-3.frag"),
+          ["sky"]: p("plates/sky.frag"),
         },
       },
     })

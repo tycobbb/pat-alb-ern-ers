@@ -12,7 +12,6 @@ struct cell_t {
 // -- uniforms --
 uniform sampler2D uState;
 uniform vec2 uScale;
-uniform float uTime;
 
 // -- u/data
 uniform float uFloat0;
@@ -66,9 +65,6 @@ void main() {
       set(1.0, n1.smp * 0.5);
       return;
     }
-    //   set(1.0, n1.smp);
-    //   return;
-    // }
   }
 
   set(c.clr, c.smp);
