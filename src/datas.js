@@ -4,6 +4,8 @@ import { renderValues } from "./utils.js"
 const kDatas = [
   "float0",
   "float1",
+  "float2",
+  "float3",
 ]
 
 const kTemplate = `

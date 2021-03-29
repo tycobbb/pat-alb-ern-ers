@@ -12,10 +12,12 @@ struct cell_t {
 // -- uniforms --
 uniform sampler2D uState;
 uniform vec2 uScale;
+uniform float uTime;
 
 // -- u/data
-uniform highp float uFloat0;
-uniform highp float uFloat1;
+uniform float uFloat0;
+uniform float uFloat1;
+uniform float uFloat2;
 
 // -- helpers --
 cell_t get(int x, int y) {
@@ -28,7 +30,7 @@ cell_t get(int x, int y) {
   c.rnd = data.a;
 
   if (c.rnd != 1.0) {
-    c.smp = max(c.rnd, uFloat0);
+    c.smp = max(c.rnd, uFloat1);
   }
 
   return c;
@@ -38,16 +40,36 @@ void set(float clr, float smp) {
   gl_FragColor = vec4(clr, smp, 1.0, 1.0);
 }
 
+float rand() {
+  vec2 st = gl_FragCoord.xy;
+  return fract(sin(dot(st, vec2(12.9898, 78.233))) * 43758.5453123);
+}
+
 // -- program --
 void main() {
-  cell_t c;
-  cell_t n = get(-1, 0);
+  cell_t n1 = get(-1, 0);
 
-  if (n.clr == 1.0 && n.smp > 0.1) {
-    set(n.clr, n.smp * uFloat1);
+  // if following cell to the left, turn on
+  if (n1.clr == 1.0 && n1.smp > 0.1) {
+    set(1.0, n1.smp * uFloat2);
     return;
   }
 
-  c = get(0, 0);
+  // check this cell
+  cell_t c = get(0, 0);
+
+  // if off...
+  if (c.clr == 0.0) {
+    // and cell below is on
+    n1 = get(0, -1);
+    if (n1.clr == 1.0 && rand() > 0.3) {
+      set(1.0, n1.smp * 0.5);
+      return;
+    }
+    //   set(1.0, n1.smp);
+    //   return;
+    // }
+  }
+
   set(c.clr, c.smp);
 }

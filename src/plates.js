@@ -5,25 +5,21 @@ const kPlates = {
   ...initPlate({
     name: "gol",
     poke: "glider",
-    data: {
-      float0: 0.0,
-      float1: 0.0,
-    },
   }),
   ...initPlate({
     name: "bar",
     poke: "square",
     data: {
       float0: 5.0,
-      float1: 0.0,
     },
   }),
   ...initPlate({
     name: "v-3",
-    poke: "square",
+    poke: "point",
     data: {
-      float0: 0.70,
-      float1: 0.98,
+      float0: 8,
+      float1: 0.70,
+      float2: 0.98,
     },
   }),
 }
@@ -52,8 +48,20 @@ export function init() {
 }
 
 function initPlate(props) {
+  const {
+    data,
+    ...rest
+  } = props
+
   const plate = {
-    ...props,
+    ...rest,
+    data: {
+      float0: 0.0,
+      float1: 0.0,
+      float2: 0.0,
+      float3: 0.0,
+      ...data,
+    },
     getData(name) {
       return this.data[name]
     }

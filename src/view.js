@@ -87,7 +87,7 @@ export function init(id, assets) {
 }
 
 // -- commands --
-export function sim(_time) {
+export function sim(time) {
   const gl = mGl
   const sd = mShaderDescs.sim
 
@@ -132,6 +132,11 @@ export function sim(_time) {
   gl.uniform1i(
     sd.uniforms.state,
     0,
+  )
+
+  gl.uniform1f(
+    sd.uniforms.time,
+    time,
   )
 
   gl.uniform2fv(
@@ -453,11 +458,14 @@ function initShaderDescs(assets) {
         pos: gl.getAttribLocation(program, "aPos"),
       },
       uniforms: {
+        time: gl.getUniformLocation(program, "uTime"),
         state: gl.getUniformLocation(program, "uState"),
         scale: gl.getUniformLocation(program, "uScale"),
         data: {
           float0: gl.getUniformLocation(program, "uFloat0"),
-          float1: gl.getUniformLocation(program, "uFloat1")
+          float1: gl.getUniformLocation(program, "uFloat1"),
+          float2: gl.getUniformLocation(program, "uFloat2"),
+          float3: gl.getUniformLocation(program, "uFloat3"),
         },
       },
     })),

@@ -3,6 +3,14 @@ import { renderValues } from "./utils.js"
 // -- constants --
 const kPokes = {
   ...initPoke({
+    name: "point",
+    w: 1,
+    h: 1,
+    data: [
+      1,
+    ]
+  }),
+  ...initPoke({
     name: "glider",
     w: 3,
     h: 3,
