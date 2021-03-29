@@ -19,4 +19,9 @@ void set(float clr) {
 
 // -- program --
 void main() {
+  if (get(0, 1) == 1 && get(0, 2) == 1) {
+    set(0.9);
+  } else {
+    set(float(get(0, 0)));
+  }
 }

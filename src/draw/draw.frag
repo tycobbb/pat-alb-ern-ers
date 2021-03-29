@@ -5,13 +5,35 @@ precision mediump float;
 // -- uniforms --
 uniform sampler2D uState;
 uniform vec2 uScale;
-uniform vec4 uFgColor;
+uniform vec4 uColor0;
+uniform vec4 uColor1;
+uniform vec4 uColor2;
+uniform vec4 uColor3;
 
 // -- varying --
 varying lowp vec4 vColor;
 
 // -- program --
 void main() {
-  vec4 sample = texture2D(uState, gl_FragCoord.xy / uScale);
-  gl_FragColor = sample.r == 1.0 ? uFgColor : vColor;
+  vec4 data = texture2D(uState, gl_FragCoord.xy / uScale);
+
+  // map r channel into a color index
+  int i = int((1.0 - data.r) * 10.0);
+
+  // pick color
+  vec4 c;
+  if (i == 0) {
+    c = uColor0;
+  } else if (i == 1) {
+    c = uColor1;
+  } else if (i == 2) {
+    c = uColor2;
+  } else if (i == 3) {
+    c = uColor3;
+  } else {
+    c = vColor;
+  }
+
+  // set output color
+  gl_FragColor = c;
 }

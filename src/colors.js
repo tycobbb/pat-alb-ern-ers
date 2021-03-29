@@ -3,6 +3,9 @@ const kColors = [
   "#b68a5b",
   "#b86661",
   "#63a5af",
+  "#ff00ff",
+  "#00ffff",
+  "#ffff00",
 ]
 
 const kTemplate = `
@@ -46,7 +49,7 @@ let $mColors = null
 let $mTemplate = null
 
 // -- lifetime --
-export function init(colors) {
+export function init() {
   $mColors = document.getElementById("colors")
   if ($mColors == null) {
     return console.error("could not find colors conatiner")
@@ -58,7 +61,7 @@ export function init(colors) {
   $mTemplate = $el.firstElementChild
 
   // add initial colors
-  addColors(colors)
+  addColors([0, 0, 1, 1, 2, 3, 4, 5])
 }
 
 // -- commands --

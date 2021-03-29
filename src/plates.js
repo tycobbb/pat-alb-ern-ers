@@ -24,10 +24,13 @@ const kPlates = {
   }),
   ...initPlate({
     name: "dot",
-    poke: "point",
+    poke: "circle",
   }),
   ...initPlate({
     name: "swp",
+  }),
+  ...initPlate({
+    name: "stp",
   }),
 }
 

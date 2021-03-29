@@ -161,7 +161,9 @@ export function sim(time) {
   )
 
   // swap textures to prepare for draw
-  swapTextures()
+  if (mPlate == null || mPlate.name != "stp") {
+    swapTextures()
+  }
 }
 
 export function draw() {
@@ -223,10 +225,13 @@ export function draw() {
   )
 
   // conf color uniforms
-  gl.uniform4fv(
-    sd.uniforms.colors.fg,
-    getFgColor(0),
-  )
+  const uniforms = sd.uniforms.colors
+  for (let i = 0; i < uniforms.length; i++) {
+    gl.uniform4fv(
+      uniforms[i],
+      getFgColor(i),
+    )
+  }
 
   // draw to screen
   gl.drawArrays(
@@ -358,7 +363,7 @@ function pokeTexture(x0, y0) {
   // get image data from poke
   const image = initSubImage(mPoke.data)
 
-  // spawn a glider at this coordinate
+  // draw image at this coordinate
   gl.bindTexture(gl.TEXTURE_2D, mTextures.curr);
   gl.texSubImage2D(
     gl.TEXTURE_2D,
@@ -455,35 +460,56 @@ function initShaderDescs(assets) {
 
   // compile and produce shader descs
   return {
-    sim: initShaderDesc(srcsSim, (program) => ({
-      attribs: {
-        pos: gl.getAttribLocation(program, "aPos"),
+    sim: initShaderDesc(
+      srcsSim,
+      initSimShaderLocations
+    ),
+    draw: initShaderDesc(
+      srcs.draw,
+      initDrawShaderLocations
+    ),
+  }
+}
+
+function initSimShaderLocations(program) {
+  const gl = mGl
+
+  return {
+    attribs: {
+      pos: gl.getAttribLocation(program, "aPos"),
+    },
+    uniforms: {
+      time: gl.getUniformLocation(program, "uTime"),
+      state: gl.getUniformLocation(program, "uState"),
+      scale: gl.getUniformLocation(program, "uScale"),
+      data: {
+        float0: gl.getUniformLocation(program, "uFloat0"),
+        float1: gl.getUniformLocation(program, "uFloat1"),
+        float2: gl.getUniformLocation(program, "uFloat2"),
+        float3: gl.getUniformLocation(program, "uFloat3"),
       },
-      uniforms: {
-        time: gl.getUniformLocation(program, "uTime"),
-        state: gl.getUniformLocation(program, "uState"),
-        scale: gl.getUniformLocation(program, "uScale"),
-        data: {
-          float0: gl.getUniformLocation(program, "uFloat0"),
-          float1: gl.getUniformLocation(program, "uFloat1"),
-          float2: gl.getUniformLocation(program, "uFloat2"),
-          float3: gl.getUniformLocation(program, "uFloat3"),
-        },
-      },
-    })),
-    draw: initShaderDesc(srcs.draw, (program) => ({
-      attribs: {
-        pos: gl.getAttribLocation(program, "aPos"),
-        color: gl.getAttribLocation(program, "aColor"),
-      },
-      uniforms: {
-        state: gl.getUniformLocation(program, "uState"),
-        scale: gl.getUniformLocation(program, "uScale"),
-        colors: {
-          fg: gl.getUniformLocation(program, "uFgColor"),
-        },
-      },
-    })),
+    },
+  }
+}
+
+function initDrawShaderLocations(program) {
+  const gl = mGl
+
+  return {
+    attribs: {
+      pos: gl.getAttribLocation(program, "aPos"),
+      color: gl.getAttribLocation(program, "aColor"),
+    },
+    uniforms: {
+      state: gl.getUniformLocation(program, "uState"),
+      scale: gl.getUniformLocation(program, "uScale"),
+      colors: [
+        gl.getUniformLocation(program, "uColor0"),
+        gl.getUniformLocation(program, "uColor1"),
+        gl.getUniformLocation(program, "uColor2"),
+        gl.getUniformLocation(program, "uColor3"),
+      ],
+    },
   }
 }
 

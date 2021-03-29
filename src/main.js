@@ -26,7 +26,7 @@ function main(assets) {
   // initialize
   initData()
   initView("canvas", assets)
-  initColors([0, 0, 1, 1, 2])
+  initColors()
   initPokes()
   initPlates()
   initDatas()
@@ -170,11 +170,12 @@ function didClickPause(evt) {
         },
         // plates
         plates: {
-          ["gol"]: p("plates/gol.frag"),
-          ["bar"]: p("plates/bar.frag"),
-          ["sky"]: p("plates/sky.frag"),
-          ["dot"]: p("plates/dot.frag"),
-          ["swp"]: p("plates/swp.frag"),
+          gol: p("plates/gol.frag"),
+          bar: p("plates/bar.frag"),
+          sky: p("plates/sky.frag"),
+          dot: p("plates/dot.frag"),
+          swp: p("plates/swp.frag"),
+          stp: p("plates/swp.frag"),
         },
       },
     })
